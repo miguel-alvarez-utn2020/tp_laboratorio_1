@@ -1,0 +1,6 @@
+13:25:45 **** Incremental Build of configuration Debug for project TP_[3] ****
+Info: Internal Builder is used for build
+gcc "-LC:\\Users\\migue\\OneDrive\\Escritorio\\TPS\\TP_[3]" -o TP_[3].exe Controller.o Passenger.o inputs.o main.o parser.o -lLinkedList 
+
+13:25:45 Build Finished. 0 errors, 0 warnings. (took 330ms)
+
