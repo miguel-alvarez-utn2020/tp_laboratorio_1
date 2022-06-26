@@ -16,7 +16,7 @@
 #include "biblioteca/inputs/inputs.h"
 #include "biblioteca/passagers/arrayPassagers.h"
 
-#define PASSAGERS 5
+#define PASSAGERS 10
 #define MAX_PASSAGER_ID 5
 #define MIN_PASSAGER_ID 1
 #define MAX_OPTION_SELECT 5
@@ -47,7 +47,6 @@ int main(void)
 	bool exitMenuInicio = false;
 	setbuf(stdout, NULL);
 	initPassagers(passagersList, PASSAGERS);
-
 	do
 	{
 		system("cls");

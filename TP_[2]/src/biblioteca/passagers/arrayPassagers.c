@@ -151,91 +151,18 @@ Passager addPassager(
     char errorRangeMsj[],
     char errorNoValidoMsj[])
 {
-    int processOk = 1;
-    int maxCharacterInputName = sizeof(newPassager.name);
 
-    utn_inputTypeText(
-        newPassager.name,
-        nameMsj,
-        errorRangeMsj,
-        MIN_CHARACTER_NAME,
-        maxCharacterInputName,
-        CHANCE_ERROR);
+    Passengger_inputName(&newPassager);
 
-    utn_inputTypeText(
-        newPassager.lastName,
-        lastNameMsj,
-        errorRangeMsj,
-        MIN_CHARACTER_NAME,
-        maxCharacterInputName,
-        CHANCE_ERROR);
+    Passengger_inputLastName(&newPassager);
 
-    utn_inputTypeText(
-        newPassager.flyCode,
-        flyCodeMsj,
-        errorNoValidoMsj,
-        MIN_CHARACTER_NAME,
-        maxCharacterInputName,
-        CHANCE_ERROR);
+    Passengger_inputCodigoVuelo(&newPassager);
 
-    utn_inputTypeFloat(
-        &newPassager.price,
-        priceMsj,
-        errorRangeMsj,
-        MIN_PRICE_PASSAGER,
-        MAX_PRICE_PASSAGER,
-        CHANCE_ERROR);
+    Passengger_inputPrice(&newPassager);
 
-    do
-    {
-        printf("Ingrese '1' si el vuelo es activo o '2' si el vuelo esta inactivo\n");
-        utn_inputTypeInt(
-            &newPassager.statusFlight,
-            statusFlightMsj,
-            errorNoValidoMsj,
-            MIN_STATUS_FLIGHT,
-            MAX_STATUS_FLIGHT,
-            CHANCE_ERROR);
-        switch (newPassager.statusFlight)
-        {
-        case 1:
-            processOk = 0;
-            break;
-        case 2:
-            processOk = 0;
-            break;
-        default:
-            printf("Estado de vuelo invalido\n");
-            system("pause");
-            break;
-        }
-    } while (processOk);
+    Passengger_inputEstadoVuelo(&newPassager);
 
-    do
-    {
-        processOk = 1;
-        printf("Ingrese '1' si el tipo de pasajero es standart, o '2' si el pasajero es vip\n");
-        utn_inputTypeInt(
-            &newPassager.typePassager,
-            typePassagerMsj,
-            errorNoValidoMsj,
-            MIN_TYPE_PASSAGER,
-            MAX_TYPE_PASSAGER,
-            CHANCE_ERROR);
-        switch (newPassager.typePassager)
-        {
-        case 1:
-            processOk = 0;
-            break;
-        case 2:
-            processOk = 0;
-            break;
-        default:
-            printf("Tipo de pasajero invalido\n");
-            system("pause");
-            break;
-        }
-    } while (processOk);
+    Passengger_inputTipoPasajero(&newPassager);
 
     return newPassager;
 }
@@ -253,8 +180,6 @@ Passager editPassager(
 
     int option;
     int exitMenuEdit = false;
-    int maxCharacterInputName = sizeof(passager.name);
-    int maxCharacterInputLastName = sizeof(passager.lastName);
 
     do
     {
@@ -270,52 +195,20 @@ Passager editPassager(
         switch (option)
         {
         case 1:
-            utn_inputTypeText(
-                passager.name,
-                nameMsj,
-                errorRangeMsj,
-                MIN_CHARACTER_NAME,
-                maxCharacterInputName,
-                CHANCE_ERROR);
-            utn_capitalizeString(passager.name);
+        	Passengger_inputName(&passager);
             break;
         case 2:
-            utn_inputTypeText(
-                passager.lastName,
-                lastNameMsj,
-                errorRangeMsj,
-                MIN_CHARACTER_NAME,
-                maxCharacterInputLastName,
-                CHANCE_ERROR);
-            utn_capitalizeString(passager.lastName);
+        	Passengger_inputLastName(&passager);
 
             break;
         case 3:
-            utn_inputTypeText(
-                passager.flyCode,
-                flyCodeMsj,
-                errorNoValidoMsj,
-                MIN_CHARACTER_NAME,
-                maxCharacterInputName,
-                CHANCE_ERROR);
+        	Passengger_inputCodigoVuelo(&passager);
             break;
         case 4:
-            utn_inputTypeFloat(
-                &passager.price,
-                priceMsj,
-                errorRangeMsj,
-                MIN_PRICE_PASSAGER,
-                MAX_PRICE_PASSAGER,
-                CHANCE_ERROR);
+        	Passengger_inputPrice(&passager);
             break;
         case 5:
-            utn_inputTypeInt(
-                &passager.typePassager,
-                typePassagerMsj,
-                errorNoValidoMsj,
-                MIN_TYPE_PASSAGER,
-                MAX_TYPE_PASSAGER,
-                CHANCE_ERROR);
+        	Passengger_inputTipoPasajero(&passager);
             break;
         case 6:
             exitMenuEdit = true;
@@ -425,24 +318,25 @@ int sortPassagerByName(Passager passagerList[], int sizePassagerList, int orderM
 void viewPassagers(Passager passagersList[], int sizePassagerList)
 {
     int i;
+
     for (i = 0; i < sizePassagerList; i++)
     {
         if (passagersList[i].isEmpty != 0)
         {
-            printf("------------------------------------\n");
-            printf("Nombre: %s\nApellido: %s\nPrice: %.2f\nCodigo de vuelo: %s\nEstado de vuelo: %d\nTipo de pasajero: %d\nID: %d\n",
-                   passagersList[i].name,
-                   passagersList[i].lastName,
-                   passagersList[i].price,
-                   passagersList[i].flyCode,
-                   passagersList[i].statusFlight,
-                   passagersList[i].typePassager,
-                   passagersList[i].id);
+            printf("ID: %d | Nombre: %s | Apellido: %s | Precio: U$D%.2f | Codigo Vuelo: %s ",
+			    passagersList[i].id,
+			    passagersList[i].name,
+			    passagersList[i].lastName,
+			    passagersList[i].price,
+			    passagersList[i].flyCode);
+            	Passenger_printEstadoVuelo( passagersList[i].statusFlight);
+            	Passenger_printTipoPasajero(passagersList[i].typePassager);
+            	printf("\n");
         }
     }
     if (i == sizePassagerList)
     {
-        printf("------------------------------------\n");
+        printf("========================================\n");
     }
 }
 /**
@@ -498,7 +392,7 @@ int sortPassengersByCode(Passager passagerList[], int sizePassagerList, int orde
                         passagerList[j].flyCode) == orderMode &&
                     Intcmp(passagerList[i].statusFlight,
                            passagerList[j].statusFlight) == orderMode &&
-                    passagerList[i].statusFlight == 1 && passagerList[j].statusFlight == 1)
+                    passagerList[i].statusFlight == 4 && passagerList[j].statusFlight == 4)
                 {
                     passagerAux = passagerList[i];
                     passagerList[i] = passagerList[j];
@@ -660,4 +554,250 @@ void menuOptionInfo()
     printf("2)Total y promedio de los pasajero y cuantos superan el promedio\n");
     printf("3)Listado de pasajeros por codigo de vuelo y estado de vuelo activo\n");
     printf("4)SALIR\n");
+}
+
+/**
+ * @brief input de carga de nombre de un pasajero
+ *
+ * @param this pasajero
+ * @return 0 si el nombre fue introducido correctamente, de lo contrario -1
+ */
+int Passengger_inputName(Passager *this)
+{
+	char name[50];
+	int charsMimino = 1;
+	int charsMaximo = 50;
+	int chanceError = 2;
+	int isValid = -1;
+	int retorno = -1;
+	do
+	{
+		isValid = utn_inputName(name, "Ingrese Nombre: ", "Nombre fuera de rango", charsMimino, charsMaximo, chanceError);
+		if (isValid == -1)
+		{
+			printf("Nombre, invalido\n");
+		}
+		else
+		{
+			strcpy(this->name, name);
+			retorno = 0;
+		}
+	} while (isValid != 0);
+	return retorno;
+}
+/**
+ * @brief input para cargar el apellido de un pasajero
+ *
+ * @param this pasajero
+ * @return 0 si el apellido fue introducido correctamente, de lo contrario -1
+ */
+int Passengger_inputLastName(Passager *this)
+{
+	char lastName[50];
+	int charsMimino = 1;
+	int charsMaximo = 50;
+	int chanceError = 2;
+	int isValid = -1;
+	int retorno = -1;
+	do
+	{
+		isValid = utn_inputName(lastName, "Ingrese Apellido: ", "Apellido, fuera de rango", charsMimino, charsMaximo, chanceError);
+		if (isValid == -1)
+		{
+			printf("Apellido, invalido\n");
+		}
+		else
+		{
+			strcpy(this->lastName, lastName);
+			retorno = 0;
+		}
+	} while (isValid != 0);
+	return retorno;
+}
+
+/**
+ * @brief input para cargar el precio de un pasajero
+ *
+ * @param this pasajero
+ * @return 0 si el precio fue cargado correctamente, de lo contrario -1
+ */
+int Passengger_inputPrice(Passager *this)
+{
+	int minPrice = 1;
+	int maxPrice = 50000;
+	float price;
+	int chanceError = 1;
+	int isValid = -1;
+	int retorno = -1;
+	do
+	{
+		isValid = utn_inputTypeFloat(&price, "Ingrese precio: ", "Precio, fuera de rango", minPrice, maxPrice, chanceError);
+		if (isValid == -1)
+		{
+			printf("Precio, invalido\n");
+		}
+		else
+		{
+			this->price = price;
+			retorno = 0;
+		}
+	} while (isValid != 0);
+	return retorno;
+}
+
+/**
+ * @brief input para cargar el codigo de vuelo de un pasajero
+ *
+ * @param this pasajero
+ * @return 0 si el codigo de vuelo fue cargado correctamente, de lo contrario -1
+ */
+int Passengger_inputCodigoVuelo(Passager *this)
+{
+	char codigoVuelo[20];
+	int charsMimino = 1;
+	int charsMaximo = 20;
+	int chanceError = 0;
+	int isValid = -1;
+	int retorno = -1;
+	do
+	{
+		isValid = utn_inputTypeText(codigoVuelo, "Ingrese Codigo de vuelo: ", "Codigo de vuelo, fuera de rango", charsMimino, charsMaximo, chanceError);
+		if (isValid == -1)
+		{
+			printf("Codigo de vuelo, invalido\n");
+		}
+		else
+		{
+			strcpy(this->flyCode, codigoVuelo);
+			retorno = 0;
+		}
+	} while (isValid != 0);
+	return retorno;
+}
+
+
+/**
+ * @brief input para cargar el tipo de pasajero
+ *
+ * @param this pasajero
+ * @return 0 si el tipo de pasajero fue cargado correctamente, de lo contrario -1
+ */
+int Passengger_inputTipoPasajero(Passager *this)
+{
+	int minTipoPasajero = 1;
+	int maxTipoPasajero = 3;
+	int tipoPasajero;
+	int chanceError = 1;
+	int isValid = -1;
+	int retorno = -1;
+	do
+	{
+		Passenger_menuTipoPasajero();
+		isValid = utn_inputTypeInt(&tipoPasajero, "Ingrese tipo de pasajero: ", "tipo, fuera de rango\n", minTipoPasajero, maxTipoPasajero, chanceError);
+		if (isValid == -1)
+		{
+			printf("Tipo de pasajero, invalido\n");
+		}
+		else
+		{
+			this->typePassager = tipoPasajero;
+			retorno = 0;
+		}
+	} while (isValid != 0);
+	return retorno;
+}
+
+void Passenger_menuTipoPasajero(){
+	printf("=====================\n");
+	printf("-Ingrese opcion:\n");
+	printf("1)First Class\n");
+	printf("2)Executive Class\n");
+	printf("3)Economy Class\n");
+	printf("=====================\n");
+}
+
+/**
+ * @brief input para cargar el tipo de pasajero
+ *
+ * @param this pasajero
+ * @return 0 si el tipo de pasajero fue cargado correctamente, de lo contrario -1
+ */
+int Passengger_inputEstadoVuelo(Passager *this)
+{
+	int minTipoPasajero = 1;
+	int maxTipoPasajero = 4;
+	int estadoVuelo;
+	int chanceError = 1;
+	int isValid = -1;
+	int retorno = -1;
+	do
+	{
+		Passenger_menuEstadoVuelo();
+		isValid = utn_inputTypeInt(&estadoVuelo, "Ingrese estado de vuelo: ", "estado de vuelo, fuera de rango\n", minTipoPasajero, maxTipoPasajero, chanceError);
+		if (isValid == -1)
+		{
+			printf("Estado de vuelo, invalido\n");
+		}
+		else
+		{
+			this->statusFlight = estadoVuelo;
+			retorno = 0;
+		}
+	} while (isValid != 0);
+	return retorno;
+}
+
+void Passenger_menuEstadoVuelo(){
+	printf("=====================\n");
+		printf("-Ingrese opcion:\n");
+		printf("1)Aterrizado\n");
+		printf("2)Demorado\n");
+		printf("3)En Horario\n");
+		printf("4)En Vuelo\n");
+		printf("=====================\n");
+}
+
+
+/**
+ * @brief muestra por consola el tipo de pasajero segun su numero de tipo
+ *
+ * @param tipoPasajero numero de tipo de pasajero
+ */
+void Passenger_printTipoPasajero(int tipoPasajero)
+{
+	switch (tipoPasajero)
+	{
+	case 1:
+		printf("| First Class ");
+		break;
+	case 2:
+		printf("| Executive Class ");
+		break;
+	case 3:
+		printf("| Economy Class ");
+		break;
+	}
+}
+/**
+ * @brief muestra en consola el estado de vuelo de un pasajero segun su numero de estado
+ *
+ * @param estadoVuelo numero de estado
+ */
+void Passenger_printEstadoVuelo(int estadoVuelo)
+{
+	switch (estadoVuelo)
+	{
+	case 1:
+		printf("| Aterrizado ");
+		break;
+	case 2:
+		printf("| Demorado ");
+		break;
+	case 3:
+		printf("| En horario ");
+		break;
+	case 4:
+		printf("| En vuelo ");
+		break;
+	}
 }

@@ -57,4 +57,16 @@ void menuOption();
 void menuOptionInfo();
 int totalAndAvaragePrices(Passager passagerList[], int passagerSize, int *amontPassagers, float *totalPrice, float *avarage);
 int highPriceAvarage(Passager passagerList[], int sizeList, float avarage, int *passagerAmount);
+
+int Passengger_inputName(Passager *this);
+int Passengger_inputLastName(Passager *this);
+int Passengger_inputPrice(Passager *this);
+int Passengger_inputCodigoVuelo(Passager *this);
+int Passengger_inputEstadoVuelo(Passager *this);
+void Passenger_menuTipoPasajero();
+int Passengger_inputTipoPasajero(Passager *this);
+void Passenger_menuEstadoVuelo();
+int Passengger_inputEstadoVuelo(Passager *this);
+void Passenger_printTipoPasajero(int tipoPasajero);
+void Passenger_printEstadoVuelo(int estadoVuelo);
 #endif /* BIBLIOTECA_PASSAGERS_ARRAYPASSAGERS_H_ */

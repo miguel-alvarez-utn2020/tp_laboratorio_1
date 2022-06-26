@@ -1,10 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <windows.h>
-#include <math.h>
-#include <unistd.h>
+#include "inputs.h"
+
 static int myGets(char *cadena, int longitud);
 static int getInt(int *pResultado);
 static int esInt(char *cadena);
@@ -13,9 +8,79 @@ static int esFloat(char *cadena);
 static int esDni(char *cadena);
 static int getDni(char *pResultado);
 static int getText(char *pResultado);
+static int cargarAuto(int arr[], int size);
 static int esChar(char pRespuesta);
+int esNombre(char* nombre);
+int containNumbersSymbols(char character);
+/**
+ * @brief Solisita al usuario cargar un cantidad espesifica de numero enteros en un array
+ *
+ * @param arr Array que contiene los elementos para procesar la tarea
+ * @param size Tamaño del array que viene por parametro
+ * \param mensaje Es el mensaje a ser mostrado
+ * \param mensajeError Es el mensaje de Error a ser mostrado
+ * \param minimo Es el numero maximo a ser aceptado
+ * \param maximo Es el minimo minimo a ser aceptado
+ *
+ * @param automatico Permite cambiar la funcion a modo carga automatica, si
+ *                   se manda por paramtro false o true. true si queremos la carga automatica
+ *                   false para carga manual.
+ * @return Retorna 0 si se obtuvo el numero y -1 si no
+ */
+int utn_cargarArrInt(int arr[],
+                     int size,
+                     char *mensaje,
+                     char *msjError,
+                     int minimo,
+                     int maximo,
+                     int reintentos,
+                     int automatico)
+{
+    int retorno = -1;
+    int i;
+    int aux;
+    if (arr != NULL && size > 0 && mensaje != NULL && msjError != NULL && minimo <= maximo && reintentos >= 0)
+    {
 
+        if (automatico)
+        {
+            cargarAuto(arr, size);
+        }
+        else
+        {
 
+            for (i = 0; i < size; i++)
+            {
+                utn_inputTypeInt(&aux, mensaje, msjError, minimo, maximo, reintentos);
+                arr[i] = aux;
+            }
+            retorno = 0;
+        }
+    }
+    return retorno;
+}
+
+/**
+ * @brief Carga un array automaticamente de 0 a size
+ *
+ * @param arr Array que contiene los elementos para procesar la tarea
+ * @param size Tamaño del array que viene por parametro
+ * @return Retorna 0 (EXITO) si se obtiene un numero entero y -1 (ERROR) si no
+ */
+static int cargarAuto(int arr[], int size)
+{
+    int i;
+    int retorno = -1;
+    if (arr != NULL && size > 0)
+    {
+        for (i = 0; i < size; i++)
+        {
+            arr[i] = i;
+        }
+        retorno = 0;
+    }
+    return retorno;
+}
 
 /**
  * \brief Solicita texto al usuario, luego de verificarlo devuelve el resultado
@@ -29,26 +94,31 @@ static int esChar(char pRespuesta);
 int utn_inputTypeText(char *pResultado, char *mensaje, char *msjError, int charsMimino, int charsMaximo, int reintentos)
 {
     int retorno = -1;
-    char bufferText[charsMaximo];
-
+    char bufferText[100];
+    int flag = 1;
     if (pResultado != NULL && mensaje != NULL && msjError != NULL && charsMimino <= charsMaximo && reintentos >= 0)
     {
 
-        while (reintentos >= 0)
-        {
-            reintentos--;
-            printf("%s", mensaje);
-            if (getText(bufferText) == 0)
-            {
-                if (strlen(bufferText) >= charsMimino && strlen(bufferText) <= charsMaximo)
-                {
-                    strcpy(pResultado, bufferText);
-                    retorno = 0;
-                    break;
-                }
-            }
-            strcpy(pResultado, msjError);
-        }
+		while (reintentos >= 0)
+		{
+			reintentos--;
+			if(flag){
+				printf("%s",mensaje);
+				flag = 0;
+			}
+			if (getText(bufferText) == 0)
+			{
+				if (strlen(bufferText) >= charsMimino && strlen(bufferText) <= charsMaximo)
+				{
+					strcpy(pResultado, bufferText);
+					retorno = 0;
+					break;
+				}
+			}else{
+				printf("%s",msjError);
+			}
+		}
+
     }
     return retorno;
 }
@@ -67,14 +137,18 @@ int utn_inputTypeDni(char *pResultado, char *mensaje, char *msjError, int vMinim
 
     char bufferDni[50];
     int retorno = -1;
-
+    int flag = 1;
     if (pResultado != NULL && mensaje != NULL && msjError != NULL && vMinimo <= vMaximo && reintentos >= 0)
     {
 
         while (reintentos > 0)
         {
             reintentos--;
-            printf("%s", mensaje);
+            if(flag){
+            	 printf("%s", mensaje);
+            	 flag = 0;
+            }
+
             if (getDni(bufferDni) == 0)
             {
                 if (strlen(bufferDni) >= vMinimo && strlen(bufferDni) <= vMaximo)
@@ -83,8 +157,10 @@ int utn_inputTypeDni(char *pResultado, char *mensaje, char *msjError, int vMinim
                     retorno = 0;
                     break;
                 }
+            }else{
+            	printf("%s", msjError);
             }
-            printf("%s", msjError);
+
         }
     }
     return retorno;
@@ -108,8 +184,8 @@ int utn_inputTypeInt(int *pResultado, char *mensaje, char *mensajeError, int min
     {
         reintentos--;
         if(flag){
-			printf("%s", mensaje);
-			flag = 0;
+        	printf("%s", mensaje);
+        	flag = 0;
         }
         if (getInt(&bufferInt) == 0)
         {
@@ -123,6 +199,7 @@ int utn_inputTypeInt(int *pResultado, char *mensaje, char *mensajeError, int min
         else{
         	printf("%s", mensajeError);
         }
+
     }
     return retorno;
 }
@@ -141,14 +218,18 @@ int utn_inputTypeFloat(float *pResultado, char *mensaje, char *msjError, float v
 
     float bufferFloat;
     int retorno = -1;
-
+    int flag = 1;
     if (pResultado != NULL && mensaje != NULL && msjError != NULL && vMinimo <= vMaximo && reintentos >= 0)
     {
 
         while (reintentos > 0)
         {
             reintentos--;
-            printf("%s", mensaje);
+            if(flag){
+            	printf("%s", mensaje);
+            	flag = 0;
+            }
+
             if (getFloat(&bufferFloat) == 0)
             {
                 if (bufferFloat >= vMinimo && bufferFloat <= vMaximo)
@@ -157,8 +238,10 @@ int utn_inputTypeFloat(float *pResultado, char *mensaje, char *msjError, float v
                     retorno = 0;
                     break;
                 }
+            }else{
+            	printf("%s", msjError);
             }
-            printf("%s", msjError);
+
         }
     }
     return retorno;
@@ -177,16 +260,20 @@ int inputTypeChar(char *pResultado, char *mensaje, char *msjError, int reintento
 
     int retorno = -1;
     char buffer;
+    int flag = 1;
     if (pResultado != NULL && mensaje != NULL && msjError != NULL && reintentos >= 0)
     {
 
         while (reintentos > 0)
         {
             reintentos--;
-
-            printf(mensaje);
+            if(flag){
+				printf("%s",mensaje);
+				flag = 0;
+            }
             fflush(stdin);
             scanf("%c", &buffer);
+            fflush(stdin);
             if (esChar(buffer))
             {
                 *pResultado = buffer;
@@ -195,7 +282,7 @@ int inputTypeChar(char *pResultado, char *mensaje, char *msjError, int reintento
             }
             else
             {
-                printf(msjError);
+                printf("%s",msjError);
             }
         }
     }
@@ -210,7 +297,6 @@ int inputTypeChar(char *pResultado, char *mensaje, char *msjError, int reintento
 static int esChar(char pRespuesta)
 {
     int retorno = 0;
-
     if ((pRespuesta >= 'a' && pRespuesta <= 'z') || (pRespuesta >= 'A' && pRespuesta <= 'Z'))
     {
         retorno = 1;
@@ -404,3 +490,65 @@ static int getText(char *pResultado)
  * @param pResultado
  * @return int
  */
+
+int utn_inputName(char *pResultado, char *mensaje, char *msjError, int charsMimino, int charsMaximo, int reintentos){
+	int retorno = -1;
+	char auxNombre[50];
+	utn_inputTypeText(auxNombre, mensaje, msjError, charsMimino, charsMaximo, reintentos);
+	if(strlen(auxNombre) > 3){
+		if(esNombre(auxNombre)){
+			utn_UpperCaseCharString(auxNombre);
+			strcpy(pResultado, auxNombre);
+			retorno = 0;
+		}
+	}
+	return retorno;
+}
+
+/**
+ * @brief comprueba si el string nombre es un nombre
+ * 
+ * @param nombre nombre para ser evaluado
+ * @return 0 si el string no es un nombre, y 1 si lo es
+ */
+int esNombre(char* nombre){
+	int i;
+	int retorno = 0;
+	for(i = 0; i < strlen(nombre)-1; i++){
+		if(containNumbersSymbols(nombre[i])){
+			retorno = 1;
+		}else{
+			retorno = 0;
+			break;
+		}
+	}
+	return retorno;
+}
+/**
+ * @brief crea una pausa para usar como paginacion en lista largas
+ * 
+ * @param list numero lista que vuelve a 0 cuando se quiere volver a pagina un rango
+ */
+void utn_nextPage(int* list){
+	printf("Pagina siguiente ->\n");
+	system("pause");
+	*list = 0;
+}
+/**
+ * @brief comprueba si el caracter esta dentro del rago de las letras
+ * 
+ * @param character 
+ * @return 0 si el caracter es un simbolor o numero, 1 si es una letra
+ */
+int containNumbersSymbols(char character){
+	int retorno = 0;
+
+	if((character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z')){
+		retorno = 1;
+	}
+	return retorno;
+}
+
+void utn_UpperCaseCharString(char * string){
+	 string[0] = toupper(string[0]);
+}
