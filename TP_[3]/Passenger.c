@@ -531,13 +531,13 @@ void Passenger_printTipoPasajero(int tipoPasajero)
 	switch (tipoPasajero)
 	{
 	case 1:
-		printf("First Class\n");
+		printf("| First Class ");
 		break;
 	case 2:
-		printf("Executive Class\n");
+		printf("| Executive Class ");
 		break;
 	case 3:
-		printf("Economy Class\n");
+		printf("| Economy Class ");
 		break;
 	}
 }
@@ -551,16 +551,16 @@ void Passenger_printEstadoVuelo(int estadoVuelo)
 	switch (estadoVuelo)
 	{
 	case 1:
-		printf("Aterrizado\n");
+		printf("| Aterrizado ");
 		break;
 	case 2:
-		printf("Demorado\n");
+		printf("| Demorado ");
 		break;
 	case 3:
-		printf("En horario\n");
+		printf("| En horario ");
 		break;
 	case 4:
-		printf("En vuelo\n");
+		printf("| En vuelo ");
 		break;
 	}
 }

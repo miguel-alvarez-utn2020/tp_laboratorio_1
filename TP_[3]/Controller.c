@@ -164,7 +164,7 @@ int controller_ListPassenger(LinkedList* pArrayListPassenger)
 	if(size > 0){
 		for(i = 0; i < size; i++ ){
 
-				printf("=================================================================================================\n");
+				printf("==================================================================================================================================\n");
 				passenger = (Passenger*)ll_get(pArrayListPassenger, i);
 				Passenger_getId(passenger, &id);
 				Passenger_getNombre(passenger, nombre);
@@ -174,10 +174,11 @@ int controller_ListPassenger(LinkedList* pArrayListPassenger)
 				Passenger_getTipoPasajero(passenger, &tipoPasajero);
 				Passenger_getStatusFly(passenger, &estadoVuelo);
 
-				printf("ID: %d\nNombre: %s\nApellido: %s\nCodigo de vuelo: %s\nPrecio: $%.2f\n", id, nombre, apellido, codigoVuelo, precio);
+				printf("ID: %d | Nombre: %s | Apellido: %s | Codigo de vuelo: %s | Precio: $%.2f ", id, nombre, apellido, codigoVuelo, precio);
 				Passenger_printTipoPasajero(tipoPasajero);
 				Passenger_printEstadoVuelo(estadoVuelo);
-				printf("=================================================================================================\n");
+				printf("\n");
+				printf("==================================================================================================================================\n");
 
 				list++;
 				if(list == 100){
